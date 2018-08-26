@@ -553,10 +553,14 @@ public class Carousel extends ViewGroup {
                 mLastVisibleChild--;
             }
             else {
-                if (mLastVisibleChild >= 0) {
+                if (mLastVisibleChild > 0) {
                     mLastVisibleChild--;
+                }else{
+                    mLastVisibleChild=mAdapter.getCount()-1;
                 }
             }
+
+            mReverseOrderIndex++;
 
             if (getChildCount() - 1 == mReverseOrderIndex) {
                 break;
