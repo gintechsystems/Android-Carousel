@@ -465,7 +465,7 @@ public class Carousel extends ViewGroup {
         if (mShouldRepeat) {
             while (newLeft + getPartOfViewCoveredBySibling() < rightScreenEdge && mLastVisibleChild <= mAdapter
                     .getCount() - 1) {
-                if(mLastVisibleChild >= mAdapter.getCount() - 1){
+                if(mLastVisibleChild >= mAdapter.getCount() - 1) {
                     mLastVisibleChild = -1;
                 }
 
@@ -510,7 +510,7 @@ public class Carousel extends ViewGroup {
         // check if we should remove any views in the left
         View firstChild = getChildAt(0);
 
-        while (firstChild != null && firstChild.getLeft()+(mChildWidth * mSpacing)  < leftScreenEdge && getChildCount() > 1) {
+        while (firstChild != null && firstChild.getLeft() + (mChildWidth * mSpacing) < leftScreenEdge && getChildCount() > 1) {
             // remove view
             removeViewsInLayout(0, 1);
 
@@ -555,8 +555,8 @@ public class Carousel extends ViewGroup {
             else {
                 if (mLastVisibleChild > 0) {
                     mLastVisibleChild--;
-                }else{
-                    mLastVisibleChild=mAdapter.getCount()-1;
+                } else {
+                    mLastVisibleChild = mAdapter.getCount() - 1;
                 }
             }
 

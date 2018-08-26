@@ -417,6 +417,7 @@ public class CoverFlowCarousel extends Carousel {
 
     public void scrollToItemPosition(int position) {
         int newItemOffset;
+
         if (position > getSelection()) {
             newItemOffset =  (mChildWidth / 2) * (position - getSelection());
         }
@@ -428,6 +429,7 @@ public class CoverFlowCarousel extends Carousel {
         }
 
         mCenterItemOffset = newItemOffset;
+
         checkScrollPosition();
     }
 

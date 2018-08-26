@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
@@ -20,17 +21,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        carousel = (CoverFlowCarousel)findViewById(R.id.carousel);
-        final MyAdapter adapter = new MyAdapter();
+        final CarouselAdapter adapter = new CarouselAdapter();
+
+        carousel = findViewById(R.id.carousel);
         carousel.setAdapter(adapter);
         carousel.setSelection(adapter.getCount() / 2);
-        //carousel.setSlowDownCoefficient(1);
+        carousel.setSlowDownCoefficient(1);
         carousel.setSpacing(0.5f);
         carousel.setRotationThreshold(0.3f);
         carousel.shouldRepeat(true); //When not using repeat, I suggest replacing getCount() below = mCount along with getItem = mResourceIds[position % mResourceIds.length].
 
         //Pointless to add a view when we are repeating.
-        Button addButton = (Button)findViewById(R.id.add_botton);
+        Button addButton = findViewById(R.id.add_botton);
         if (!carousel.isRepeating()) {
             addButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -45,11 +47,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private class MyAdapter extends BaseAdapter {
-        private int[] mResourceIds = {R.drawable.poster1, R.drawable.poster2, R.drawable.poster3, R.drawable.poster4,
-            R.drawable.poster5};
+    private class CarouselAdapter extends BaseAdapter {
+        private int[] mResourceIds = {R.drawable.poster1, R.drawable.poster2, R.drawable.poster3, R.drawable.poster4 };
 
-        private int mCount = mResourceIds.length * 5;
+        //private int mCount = mResourceIds.length * 4;
 
         @Override
         public int getCount() {
@@ -75,21 +76,20 @@ public class MainActivity extends AppCompatActivity {
                 v = (MyFrame)convertView;
             }
 
-            v.setImageResource(mResourceIds[position % mResourceIds.length]);
+            v.setImageResource(mResourceIds[position]);
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //carousel.scrollToItemPosition(position);
-                    Toast.makeText(MainActivity.this, "clicked position:"+position,Toast.LENGTH_SHORT).show();
+                    carousel.scrollToItemPosition(position);
+                    Toast.makeText(MainActivity.this, "clicked position:" + position, Toast.LENGTH_SHORT).show();
                 }
             });
-
 
             return v;
         }
 
         public void addView(){
-            mCount++;
+            //mCount++;
             notifyDataSetChanged();
         }
     }
