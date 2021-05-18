@@ -5,10 +5,8 @@ import java.util.LinkedList;
 
 import android.content.Context;
 import android.database.DataSetObserver;
-import android.graphics.Canvas;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.*;
 import android.widget.Adapter;
 import android.widget.Scroller;
@@ -16,7 +14,7 @@ import android.widget.Scroller;
 /**
  * @author Martin Appl (appl.m@seznam.cz)
  */
-public class Carousel extends ViewGroup {
+public class Carousel extends ReflectingLayout {
     protected final int NO_VALUE = Integer.MIN_VALUE + 1777;
 
     /**
@@ -316,9 +314,8 @@ public class Carousel extends ViewGroup {
      *
      * @param child      The view to add
      * @param layoutMode Either LAYOUT_MODE_LEFT or LAYOUT_MODE_RIGHT
-     * @return child which was actually added to container, subclasses can override to introduce frame views
      */
-    protected View addAndMeasureChild(final View child, final int layoutMode) {
+    protected void addAndMeasureChild(final View child, final int layoutMode) {
         if (child.getLayoutParams() == null) child.setLayoutParams(new LayoutParams(mChildWidth,
             mChildHeight));
 
@@ -328,9 +325,13 @@ public class Carousel extends ViewGroup {
         final int pwms = MeasureSpec.makeMeasureSpec(mChildWidth, MeasureSpec.EXACTLY);
         final int phms = MeasureSpec.makeMeasureSpec(mChildHeight, MeasureSpec.EXACTLY);
         measureChild(child, pwms, phms);
-        child.setDrawingCacheEnabled(isChildrenCached());
 
-        return child;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            child.setDrawingCacheEnabled(isChildrenCached());
+        }
+        else {
+            child.setDrawingCacheEnabled(isChildrenDrawnWithCacheEnabled());
+        }
     }
 
     /**
@@ -890,7 +891,7 @@ public class Carousel extends ViewGroup {
     }
 
     protected static class ViewCache<T extends View> {
-        private final LinkedList<WeakReference<T>> mCachedItemViews = new LinkedList<WeakReference<T>>();
+        private final LinkedList<WeakReference<T>> mCachedItemViews = new LinkedList<>();
 
         /**
          * Check if list of weak references has any view still in memory to offer for recycling

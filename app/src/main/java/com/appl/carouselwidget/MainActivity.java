@@ -3,14 +3,13 @@ package com.appl.carouselwidget;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 
 import com.appl.library.CoverFlowCarousel;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,27 +28,14 @@ public class MainActivity extends AppCompatActivity {
         carousel.setSlowDownCoefficient(1);
         carousel.setSpacing(0.5f);
         carousel.setRotationThreshold(0.3f);
-        carousel.shouldRepeat(true); //When not using repeat, I suggest replacing getCount() below = mCount along with getItem = mResourceIds[position % mResourceIds.length].
-
-        //Pointless to add a view when we are repeating.
-        Button addButton = findViewById(R.id.add_botton);
-        if (!carousel.isRepeating()) {
-            addButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    adapter.addView();
-                }
-            });
-        }
-        else {
-            addButton.setVisibility(View.GONE);
-        }
+        //When not using repeat, I suggest replacing getCount() below = mCount along with getItem = mResourceIds[position % mResourceIds.length].
+        // shouldRepeat is currently broken, clicks do not go to the correct position.
+        //carousel.shouldRepeat(true);
     }
 
 
     private class CarouselAdapter extends BaseAdapter {
-        private int[] mResourceIds = {R.drawable.poster1, R.drawable.poster2, R.drawable.poster3, R.drawable.poster4 };
-
+        private final int[] mResourceIds = {R.drawable.poster1, R.drawable.poster2, R.drawable.poster3, R.drawable.poster4 };
         //private int mCount = mResourceIds.length * 4;
 
         @Override
@@ -77,25 +63,22 @@ public class MainActivity extends AppCompatActivity {
             }
 
             v.setImageResource(mResourceIds[position]);
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    carousel.scrollToItemPosition(position);
-                    Toast.makeText(MainActivity.this, "clicked position:" + position, Toast.LENGTH_SHORT).show();
-                }
+            v.setOnClickListener(v2 -> {
+                carousel.scrollToItemPosition(position);
+                Toast.makeText(MainActivity.this, "clicked position:" + position, Toast.LENGTH_SHORT).show();
             });
 
             return v;
         }
 
-        public void addView(){
+        public void addView() {
             //mCount++;
             notifyDataSetChanged();
         }
     }
 
     public static class MyFrame extends FrameLayout {
-        private ImageView mImageView;
+        private final ImageView mImageView;
 
         public void setImageResource(int resId){
             mImageView.setImageResource(resId);
